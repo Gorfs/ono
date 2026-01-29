@@ -1,0 +1,8 @@
+repos:
+  - repo: local
+    hooks:
+      - id: dune-fmt
+        name: dune fmt
+        entry: dune fmt
+        language: system
+        types: [ocaml]
