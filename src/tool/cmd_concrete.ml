@@ -3,11 +3,15 @@
 open Cmdliner
 open Ono_cli
 
+let seed_generator seed =
+  match seed with None -> Random.self_init () | Some s -> Random.init s
+
 let info = Cmd.info "concrete" ~exits
 
 let term =
   let open Term.Syntax in
-  let+ () = setup_log and+ source_file = source_file in
+  let+ () = setup_log and+ seed = seed and+ source_file = source_file in
+  seed_generator seed;
   Ono.Concrete_driver.run ~source_file |> function
   | Ok () -> Ok ()
   | Error e -> Error (`Msg (Kdo.R.err_to_string e))

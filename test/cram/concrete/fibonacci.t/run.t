@@ -1,4 +1,4 @@
 Compute Fibonnaci and print the result:
-  $ ono concrete fibonnaci.wat
+  $ dune exec -- ono concrete fibonnaci.wat
   55
   OK!
