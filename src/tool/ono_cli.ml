@@ -81,3 +81,17 @@ let seed =
 let use_graphical_window =
   let doc = "Use a graphical window for output." in
   Arg.(value & flag & info [ "use-graphical-window" ] ~doc)
+
+let steps =
+  let doc = "Number of simulation steps to run." in
+  Arg.(value & opt (some int) None (info [ "steps" ] ~doc ~docv:"N"))
+
+let display_last =
+  let doc = "Only display the last N configurations." in
+  Arg.(value & opt (some int) None (info [ "display-last" ] ~doc ~docv:"N"))
+
+let config_file =
+  let doc = "Initial configuration file." in
+  Arg.(
+    value
+    & opt (some existing_file_conv) None (info [ "config" ] ~doc ~docv:"FILE"))

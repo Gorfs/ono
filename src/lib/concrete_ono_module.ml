@@ -4,6 +4,7 @@ type instructionSet = {
   print_i32 : Kdo.Concrete.I32.t -> (unit, Owi.Result.err) Result.t;
   print_i64 : Kdo.Concrete.I64.t -> (unit, Owi.Result.err) Result.t;
   random_i32 : unit -> (Kdo.Concrete.I32.t, Owi.Result.err) Result.t;
+  read_int : unit -> (Kdo.Concrete.I32.t, Owi.Result.err) Result.t;
 }
 
 let text_print_i32 (n : Kdo.Concrete.I32.t) : (unit, Owi.Result.err) Result.t =
@@ -18,11 +19,20 @@ let text_random_i32 () : (Kdo.Concrete.I32.t, Owi.Result.err) Result.t =
   let n = Random.int32 Int32.max_int in
   Ok (Kdo.Concrete.I32.of_int32 n)
 
+let text_read_int () : (Kdo.Concrete.I32.t, Owi.Result.err) Result.t =
+  try
+    let n = read_int () in
+    Ok (Kdo.Concrete.I32.of_int n)
+  with Failure _ ->
+    (* En cas d'erreur de lecture, on renvoie 0 ou on gère l'erreur *)
+    Ok (Kdo.Concrete.I32.of_int32 0l)
+
 let textSet =
   {
     print_i32 = text_print_i32;
     print_i64 = text_print_i64;
     random_i32 = text_random_i32;
+    read_int = text_read_int;
   }
 
 let gui_print_i32 (n : Kdo.Concrete.I32.t) : (unit, Owi.Result.err) Result.t =
@@ -37,18 +47,16 @@ let gui_random_i32 () : (Kdo.Concrete.I32.t, Owi.Result.err) Result.t =
   let n = Random.int32 Int32.max_int in
   Ok (Kdo.Concrete.I32.of_int32 n)
 
+let gui_read_int () : (Kdo.Concrete.I32.t, Owi.Result.err) Result.t =
+  text_read_int ()
+
 let guiSet =
   {
     print_i32 = gui_print_i32;
     print_i64 = gui_print_i64;
     random_i32 = gui_random_i32;
+    read_int = gui_read_int;
   }
-
-let text_read_int () : (Kdo.Concrete.I32.t, Owi.Result.err) Result.t =
-  try
-    let n = read_int () in
-    Ok (Kdo.Concrete.I32.of_int n)
-  with Failure _ -> Error (Owi.Result.Err "Failed to read an integer")
 
 let m (use_graphical_window : bool) =
   let open Kdo.Concrete.Extern_func in
@@ -61,12 +69,14 @@ let m (use_graphical_window : bool) =
         ("print_i32", Extern_func (i32 ^->. unit, guiSet.print_i32));
         ("print_i64", Extern_func (i64 ^->. unit, guiSet.print_i64));
         ("random_i32", Extern_func (unit ^->. i32, guiSet.random_i32));
+        ("read_int", Extern_func (unit ^->. i32, guiSet.read_int));
       ]
     else
       [
         ("print_i32", Extern_func (i32 ^->. unit, textSet.print_i32));
         ("print_i64", Extern_func (i64 ^->. unit, textSet.print_i64));
         ("random_i32", Extern_func (unit ^->. i32, textSet.random_i32));
+        ("read_int", Extern_func (unit ^->. i32, textSet.read_int));
       ]
   in
   {
