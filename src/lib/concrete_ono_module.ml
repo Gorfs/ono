@@ -44,6 +44,12 @@ let guiSet =
     random_i32 = gui_random_i32;
   }
 
+let text_read_int () : (Kdo.Concrete.I32.t, Owi.Result.err) Result.t =
+  try
+    let n = read_int () in
+    Ok (Kdo.Concrete.I32.of_int n)
+  with Failure _ -> Error (Owi.Result.Err "Failed to read an integer")
+
 let m (use_graphical_window : bool) =
   let open Kdo.Concrete.Extern_func in
   let open Kdo.Concrete.Extern_func.Syntax in
