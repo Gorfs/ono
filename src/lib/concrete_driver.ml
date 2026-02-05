@@ -1,7 +1,7 @@
 open Syntax
 module Interpret = Kdo.Interpret.Concrete (Kdo.Interpret.Default_parameters)
 
-let run ~source_file use_graphical_window =
+let run ~source_file ~steps ~display_last ~config_file use_graphical_window =
   (* Parsing. *)
   Logs.info (fun m -> m "Parsing file %a..." Fpath.pp source_file);
   let* wat_module = Kdo.Parse.Wat.Module.from_file source_file in
@@ -35,4 +35,14 @@ let run ~source_file use_graphical_window =
 
   (* Interpreting. *)
   Logs.info (fun m -> m "Interpreting...");
+  (* Set environment variables for Wasm to read *)
+  (match steps with
+  | Some n -> Unix.putenv "ONO_STEPS" (string_of_int n)
+  | None -> ());
+  (match display_last with
+  | Some n -> Unix.putenv "ONO_DISPLAY_LAST" (string_of_int n)
+  | None -> ());
+  (match config_file with
+  | Some f -> Unix.putenv "ONO_CONFIG_FILE" (Fpath.to_string f)
+  | None -> ());
   Interpret.modul link_state linked_module

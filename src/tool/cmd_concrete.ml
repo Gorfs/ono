@@ -13,10 +13,15 @@ let term =
   let+ () = setup_log
   and+ seed = seed
   and+ source_file = source_file
-  and+ use_graphical_window = use_graphical_window in
+  and+ use_graphical_window = use_graphical_window
+  and+ steps = steps
+  and+ display_last = display_last
+  and+ config_file = config_file in
   seed_generator seed;
 
-  Ono.Concrete_driver.run ~source_file use_graphical_window |> function
+  Ono.Concrete_driver.run ~source_file ~steps ~display_last ~config_file
+    use_graphical_window
+  |> function
   | Ok () -> Ok ()
   | Error e -> Error (`Msg (Kdo.R.err_to_string e))
 
