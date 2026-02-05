@@ -4,7 +4,7 @@ Test the output of the man page:
          ono-concrete
   
   SYNOPSIS
-         ono concrete [--seed=SEED] [OPTION]… FILE
+         ono concrete [--seed=SEED] [--use-graphical-window] [OPTION]… FILE
   
   ARGUMENTS
          FILE (required)
@@ -14,6 +14,9 @@ Test the output of the man page:
          --seed=SEED
              Seed for random number generation.
   
+         --use-graphical-window
+             Use a graphical window for output.
+
   COMMON OPTIONS
          --color=WHEN (absent=auto)
              Colorize the output. WHEN must be one of auto, always or never.

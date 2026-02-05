@@ -1,7 +1,7 @@
 open Syntax
 module Interpret = Kdo.Interpret.Concrete (Kdo.Interpret.Default_parameters)
 
-let run ~source_file =
+let run ~source_file use_graphical_window =
   (* Parsing. *)
   Logs.info (fun m -> m "Parsing file %a..." Fpath.pp source_file);
   let* wat_module = Kdo.Parse.Wat.Module.from_file source_file in
@@ -24,7 +24,9 @@ let run ~source_file =
     Kdo.Link.State.empty ()
   in
   let link_state =
-    Kdo.Link.Extern.modul Concrete_ono_module.m link_state ~name:"ono"
+    Kdo.Link.Extern.modul
+      (Concrete_ono_module.m use_graphical_window)
+      link_state ~name:"ono"
   in
   let name = Some (Fpath.to_string source_file) in
   let* linked_module, link_state =

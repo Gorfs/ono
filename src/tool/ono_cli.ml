@@ -77,3 +77,7 @@ let source_file =
 let seed =
   let doc = "Seed for random number generation." in
   Arg.(value & opt (some int) None (info [ "seed" ] ~doc ~docv:"SEED"))
+
+let use_graphical_window =
+  let doc = "Use a graphical window for output." in
+  Arg.(value & flag & info [ "use-graphical-window" ] ~doc)

@@ -10,9 +10,13 @@ let info = Cmd.info "concrete" ~exits
 
 let term =
   let open Term.Syntax in
-  let+ () = setup_log and+ seed = seed and+ source_file = source_file in
+  let+ () = setup_log
+  and+ seed = seed
+  and+ source_file = source_file
+  and+ use_graphical_window = use_graphical_window in
   seed_generator seed;
-  Ono.Concrete_driver.run ~source_file |> function
+
+  Ono.Concrete_driver.run ~source_file use_graphical_window |> function
   | Ok () -> Ok ()
   | Error e -> Error (`Msg (Kdo.R.err_to_string e))
 
