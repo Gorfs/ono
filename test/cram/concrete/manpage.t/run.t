@@ -1,5 +1,5 @@
 Test the output of the man page:
-  $ ono concrete --help=plain
+  $ dune exec -- ono concrete --help=plain
   NAME
          ono-concrete
   

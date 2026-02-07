@@ -40,7 +40,7 @@ let exits =
 (* Common options *)
 
 let sdocs = Manpage.s_common_options
-let version = "0.0"
+let version = "0.0.1"
 
 let log_level =
   let env = Cmd.Env.info "ONO_VERBOSITY" in
@@ -68,11 +68,6 @@ let setup_log =
   Logs.Src.set_level Owi.Log.bench_src None;
   let reporter = Logs_fmt.reporter () in
   Logs.set_reporter reporter
-
-let source_file =
-  let doc = "Source file to analyze." in
-  Arg.(
-    required & pos 0 (some existing_file_conv) None (info [] ~doc ~docv:"FILE"))
 
 let seed =
   let doc = "Seed for random number generation." in
