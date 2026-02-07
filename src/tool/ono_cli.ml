@@ -80,7 +80,7 @@ let seed =
 
 let use_graphical_window =
   let doc = "Use a graphical window for output." in
-  Arg.(value & flag & info [ "use-graphical-window" ] ~doc)
+  Arg.(value & opt (some bool) None (info [ "use-graphical-window" ] ~doc))
 
 let steps =
   let doc = "Number of simulation steps to run." in
