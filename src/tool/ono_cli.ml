@@ -40,7 +40,7 @@ let exits =
 (* Common options *)
 
 let sdocs = Manpage.s_common_options
-let version = "0.0"
+let version = "0.0.1"
 
 let log_level =
   let env = Cmd.Env.info "ONO_VERBOSITY" in
@@ -69,11 +69,6 @@ let setup_log =
   let reporter = Logs_fmt.reporter () in
   Logs.set_reporter reporter
 
-let source_file =
-  let doc = "Source file to analyze." in
-  Arg.(
-    required & pos 0 (some existing_file_conv) None (info [] ~doc ~docv:"FILE"))
-
 let seed =
   let doc = "Seed for random number generation." in
   Arg.(value & opt (some int) None (info [ "seed" ] ~doc ~docv:"SEED"))
@@ -81,3 +76,8 @@ let seed =
 let use_graphical_window =
   let doc = "Use a graphical window for output." in
   Arg.(value & flag & info [ "use-graphical-window" ] ~doc)
+
+let source_file =
+  let doc = "Source file to analyze." in
+  Arg.(
+    required & pos 0 (some existing_file_conv) None (info [] ~doc ~docv:"FILE"))
