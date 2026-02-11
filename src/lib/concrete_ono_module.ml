@@ -20,6 +20,7 @@ let text_print_i64 (n : Kdo.Concrete.I64.t) : (unit, Owi.Result.err) Result.t =
   Ok ()
 
 let text_read_int () : (Kdo.Concrete.I32.t, Owi.Result.err) Result.t =
+  Printf.printf "Please enter an integer: ";
   try
     let n = read_int () in
     Ok (Kdo.Concrete.I32.of_int n)
