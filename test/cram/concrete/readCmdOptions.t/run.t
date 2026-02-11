@@ -5,7 +5,8 @@ See if the wasm can see the steps and last_scenes options
   OK!
 Deal with non numbers :
   $ dune exec -- ono concrete test.wat --steps ab
-  Usage: ono concrete [--help] [OPTION]… FILE
-  ono: option --steps: invalid value ab, expected an integer
+  ono: option '--steps': invalid value 'ab', expected an integer
+  Usage: ono concrete [OPTION]… FILE
+  Try 'ono concrete --help' or 'ono --help' for more information.
   ono: [ERROR] command line parsing error
   [124]
