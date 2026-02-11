@@ -20,12 +20,22 @@ let text_print_i64 (n : Kdo.Concrete.I64.t) : (unit, Owi.Result.err) Result.t =
   Ok ()
 
 let text_read_int () : (Kdo.Concrete.I32.t, Owi.Result.err) Result.t =
+  Printf.printf "Input an integer: ";
   try
     let n = read_int () in
     Ok (Kdo.Concrete.I32.of_int n)
-  with Failure _ ->
-    (* En cas d'erreur de lecture, on renvoie 0 ou on gère l'erreur *)
-    Ok (Kdo.Concrete.I32.of_int32 0l)
+  with
+  | Failure msg ->
+      Logs.err (fun m ->
+          m
+            "Failed to read int from stdin (Failure: %s); returning 0 as \
+             fallback."
+            msg);
+      Ok (Kdo.Concrete.I32.of_int32 0l)
+  | End_of_file ->
+      Logs.err (fun m ->
+          m "End_of_file while reading int from stdin; returning 0 as fallback.");
+      Ok (Kdo.Concrete.I32.of_int32 0l)
 
 let textSet =
   {
