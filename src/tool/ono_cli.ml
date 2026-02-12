@@ -90,7 +90,7 @@ let config_file =
   Arg.(
     value
     & opt (some existing_file_conv) None (info [ "config" ] ~doc ~docv:"FILE"))
-  Arg.(value & flag & info [ "use-graphical-window" ] ~doc)
+    Arg.(value & flag & info [ "use-graphical-window" ] ~doc)
 
 let source_file =
   let doc = "Source file to analyze." in
