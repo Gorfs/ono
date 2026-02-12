@@ -22,7 +22,7 @@
         (br $next)))
     (call $newline))
 
-  (func $main (export "_start")
+  (func $main
     ;; Row 0: alternating on/off  -> 0b01010101 = 0x55 = 85
     (call $print_row (i32.const 85))
     ;; Row 1: alternating off/on  -> 0b10101010 = 0xAA = 170
@@ -35,6 +35,7 @@
     ;; Flush the frame to the window.
     (call $clear_screen)
 
-    ;; Keep the window open for 3 seconds so we can see the result.
+    ;; Keep the window open for 30 seconds so we can see the result.
     (call $sleep (i32.const 30000)))
+  (start $main)
 )
