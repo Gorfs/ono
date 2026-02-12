@@ -26,7 +26,7 @@ let textSet =
   }
 
 let gui_print_i32 (n : Kdo.Concrete.I32.t) : (unit, Owi.Result.err) Result.t =
-  Logs.app (fun m -> m "%a" Kdo.Concrete.I32.pp n);
+  Gui.print_cell (Kdo.Concrete.I32.to_int n);
   Ok ()
 
 let gui_print_i64 (n : Kdo.Concrete.I64.t) : (unit, Owi.Result.err) Result.t =
@@ -36,6 +36,19 @@ let gui_print_i64 (n : Kdo.Concrete.I64.t) : (unit, Owi.Result.err) Result.t =
 let gui_random_i32 () : (Kdo.Concrete.I32.t, Owi.Result.err) Result.t =
   let n = Random.int32 Int32.max_int in
   Ok (Kdo.Concrete.I32.of_int32 n)
+
+let gui_newline () : (unit, Owi.Result.err) Result.t =
+  Gui.newline ();
+  Ok ()
+
+let gui_clear_screen () : (unit, Owi.Result.err) Result.t =
+  Gui.clear_screen ();
+  Ok ()
+
+let gui_sleep (ms : Kdo.Concrete.I32.t) : (unit, Owi.Result.err) Result.t =
+  let seconds = Float.of_int (Kdo.Concrete.I32.to_int ms) /. 1000.0 in
+  Gui.sleep seconds;
+  Ok ()
 
 let guiSet =
   {
@@ -55,6 +68,10 @@ let m (use_graphical_window : bool) =
         ("print_i32", Extern_func (i32 ^->. unit, guiSet.print_i32));
         ("print_i64", Extern_func (i64 ^->. unit, guiSet.print_i64));
         ("random_i32", Extern_func (unit ^->. i32, guiSet.random_i32));
+        ("print_cell", Extern_func (i32 ^->. unit, guiSet.print_i32));
+        ("newline", Extern_func (unit ^->. unit, gui_newline));
+        ("clear_screen", Extern_func (unit ^->. unit, gui_clear_screen));
+        ("sleep", Extern_func (i32 ^->. unit, gui_sleep));
       ]
     else
       [

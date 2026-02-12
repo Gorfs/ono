@@ -2,6 +2,7 @@ open Syntax
 module Interpret = Kdo.Interpret.Concrete (Kdo.Interpret.Default_parameters)
 
 let run ~source_file use_graphical_window =
+  if use_graphical_window then Gui.init ~width:90 ~height:50 ~cell_size:10;
   (* Parsing. *)
   Logs.info (fun m -> m "Parsing file %a..." Fpath.pp source_file);
   let* wat_module = Kdo.Parse.Wat.Module.from_file source_file in
@@ -35,4 +36,6 @@ let run ~source_file use_graphical_window =
 
   (* Interpreting. *)
   Logs.info (fun m -> m "Interpreting...");
-  Interpret.modul link_state linked_module
+  let result = Interpret.modul link_state linked_module in
+  if use_graphical_window then Gui.wait_for_close ();
+  result
