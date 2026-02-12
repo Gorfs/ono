@@ -1,5 +1,5 @@
 Test the output of the man page:
-  $ ono concrete --help=plain
+  $ dune exec -- ono concrete --help=plain
   NAME
          ono-concrete
   
@@ -16,7 +16,7 @@ Test the output of the man page:
   
          --use-graphical-window
              Use a graphical window for output.
-
+  
   COMMON OPTIONS
          --color=WHEN (absent=auto)
              Colorize the output. WHEN must be one of auto, always or never.
@@ -72,5 +72,6 @@ Test the output of the man page:
   SEE ALSO
          ono(1)
   
+
 
 
