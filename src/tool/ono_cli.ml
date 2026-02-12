@@ -90,3 +90,8 @@ let config_file =
   Arg.(
     value
     & opt (some existing_file_conv) None (info [ "config" ] ~doc ~docv:"FILE"))
+
+let source_file =
+  let doc = "Source file to analyze." in
+  Arg.(
+    required & pos 0 (some existing_file_conv) None (info [] ~doc ~docv:"FILE"))
