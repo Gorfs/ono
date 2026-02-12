@@ -4,17 +4,23 @@ Test the output of the man page:
          ono-concrete
   
   SYNOPSIS
-         ono concrete [--seed=SEED] [--use-graphical-window] [OPTION]… FILE
+         ono concrete [OPTION]… FILE
   
   ARGUMENTS
          FILE (required)
              Source file to analyze.
   
   OPTIONS
+         --display-last=N
+             Only display the last N configurations.
+  
          --seed=SEED
              Seed for random number generation.
   
-         --use-graphical-window
+         --steps=N
+             Number of simulation steps to run.
+  
+         --use-graphical-window=VAL
              Use a graphical window for output.
   
   COMMON OPTIONS
@@ -72,6 +78,3 @@ Test the output of the man page:
   SEE ALSO
          ono(1)
   
-
-
-
