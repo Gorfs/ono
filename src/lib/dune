@@ -3,6 +3,9 @@
  (modules
   concrete_driver
   concrete_ono_module
+  concrete_ono_text
+  concrete_ono_gui
+  concrete_ono_types
   error
   symbolic_driver
   symbolic_ono_module

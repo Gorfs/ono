@@ -1,72 +1,6 @@
-type extern_func = Kdo.Concrete.Extern_func.extern_func
-
-type instructionSet = {
-  print_i32 : Kdo.Concrete.I32.t -> (unit, Owi.Result.err) Result.t;
-  print_i64 : Kdo.Concrete.I64.t -> (unit, Owi.Result.err) Result.t;
-  random_i32 : unit -> (Kdo.Concrete.I32.t, Owi.Result.err) Result.t;
-  read_int : unit -> (Kdo.Concrete.I32.t, Owi.Result.err) Result.t;
-}
-
 let random_i32 () : (Kdo.Concrete.I32.t, Owi.Result.err) Result.t =
   let n = Random.int32 Int32.max_int in
   Ok (Kdo.Concrete.I32.of_int32 n)
-
-let text_print_i32 (n : Kdo.Concrete.I32.t) : (unit, Owi.Result.err) Result.t =
-  Logs.app (fun m -> m "%a" Kdo.Concrete.I32.pp n);
-  Ok ()
-
-let text_print_i64 (n : Kdo.Concrete.I64.t) : (unit, Owi.Result.err) Result.t =
-  Logs.app (fun m -> m "%a" Kdo.Concrete.I64.pp n);
-  Ok ()
-
-let text_read_int () : (Kdo.Concrete.I32.t, Owi.Result.err) Result.t =
-  Printf.printf "Please enter an integer: ";
-  try
-    let n = read_int () in
-    Ok (Kdo.Concrete.I32.of_int n)
-  with
-  | Failure msg ->
-      Logs.err (fun m ->
-          m
-            "Failed to read int from stdin (Failure: %s); returning 0 as \
-             fallback."
-            msg);
-      Ok (Kdo.Concrete.I32.of_int32 0l)
-  | End_of_file ->
-      Logs.err (fun m ->
-          m "End_of_file while reading int from stdin; returning 0 as fallback.");
-      Ok (Kdo.Concrete.I32.of_int32 0l)
-
-let textSet =
-  {
-    print_i32 = text_print_i32;
-    print_i64 = text_print_i64;
-    random_i32;
-    read_int = text_read_int;
-  }
-
-let gui_print_i32 (n : Kdo.Concrete.I32.t) : (unit, Owi.Result.err) Result.t =
-  Logs.app (fun m -> m "%a" Kdo.Concrete.I32.pp n);
-  Ok ()
-
-let gui_print_i64 (n : Kdo.Concrete.I64.t) : (unit, Owi.Result.err) Result.t =
-  Logs.app (fun m -> m "%a" Kdo.Concrete.I64.pp n);
-  Ok ()
-
-let gui_random_i32 () : (Kdo.Concrete.I32.t, Owi.Result.err) Result.t =
-  let n = Random.int32 Int32.max_int in
-  Ok (Kdo.Concrete.I32.of_int32 n)
-
-let gui_read_int () : (Kdo.Concrete.I32.t, Owi.Result.err) Result.t =
-  text_read_int ()
-
-let guiSet =
-  {
-    print_i32 = gui_print_i32;
-    print_i64 = gui_print_i64;
-    random_i32 = gui_random_i32;
-    read_int = gui_read_int;
-  }
 
 let m (use_graphical_window : bool) (steps : int) (display_last : int) =
   let casted_steps = Int32.of_int steps in
@@ -75,7 +9,7 @@ let m (use_graphical_window : bool) (steps : int) (display_last : int) =
   let open Kdo.Concrete.Extern_func.Syntax in
   let baseInstructions =
     [
-      ("random_i32", Extern_func (unit ^->. i32, guiSet.random_i32));
+      ("random_i32", Extern_func (unit ^->. i32, random_i32));
       ( "get_steps",
         Extern_func
           (unit ^->. i32, fun () -> Ok (Kdo.Concrete.I32.of_int32 casted_steps))
@@ -86,23 +20,10 @@ let m (use_graphical_window : bool) (steps : int) (display_last : int) =
             fun () -> Ok (Kdo.Concrete.I32.of_int32 casted_display_last) ) );
     ]
   in
-  let textSet = textSet in
-  let guiSet = guiSet in
   let functions =
     if use_graphical_window then
-      List.append baseInstructions
-        [
-          ("print_i32", Extern_func (i32 ^->. unit, guiSet.print_i32));
-          ("print_i64", Extern_func (i64 ^->. unit, guiSet.print_i64));
-          ("read_int", Extern_func (unit ^->. i32, guiSet.read_int));
-        ]
-    else
-      List.append baseInstructions
-        [
-          ("print_i32", Extern_func (i32 ^->. unit, textSet.print_i32));
-          ("print_i64", Extern_func (i64 ^->. unit, textSet.print_i64));
-          ("read_int", Extern_func (unit ^->. i32, textSet.read_int));
-        ]
+      List.append baseInstructions Concrete_ono_gui.functions
+    else List.append baseInstructions Concrete_ono_text.functions
   in
   {
     Kdo.Extern.Module.functions;
