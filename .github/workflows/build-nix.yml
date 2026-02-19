@@ -26,7 +26,7 @@ jobs:
             git checkout ${{ github.ref_name }}
           fi
 
-          nix-shell --run "
+          nix-shell --option sandbox false --run "
             ODOC_WARN_ERROR=true
             dune build @fmt &&
             dune build @doc &&
@@ -35,6 +35,4 @@ jobs:
             dune runtest
           "
 
-          nix-shell -p git --run "
-            git diff --exit-code ono.opam
-          "
+          git diff --exit-code ono.opam
