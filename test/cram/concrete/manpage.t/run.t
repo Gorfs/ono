@@ -20,7 +20,7 @@ Test the output of the man page:
          --steps=N
              Number of simulation steps to run.
   
-         --use-graphical-window=VAL
+         --use-graphical-window=BOOL
              Use a graphical window for output.
   
   COMMON OPTIONS
