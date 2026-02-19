@@ -1,5 +1,5 @@
 (module
-
+  (import "ono" "get_steps" (func $get_steps (result i32)))
   (import "ono" "random_i32" (func $random (result i32)))
   (import "ono" "cell_print" (func $cell_print (param i32)))
   (import "ono" "newline" (func $newline))
@@ -255,11 +255,22 @@
   )
 
   (func $main (export "main")
+    (local $steps i32)
+    (local $i i32)
+    
+    (local.set $steps (call $get_steps))  ;; récupère le nb de steps
+    (local.set $i (i32.const 0))
+    
     (call $init_grid)
-    (loop $game_loop
-      (call $print_grid)
-      (call $step)
-      (br $game_loop)
+    
+    (block $break
+      (loop $game_loop
+        (br_if $break (i32.ge_s (local.get $i) (local.get $steps)))  ;; sort si i >= steps
+        (call $print_grid)
+        (call $step)
+        (local.set $i (i32.add (local.get $i) (i32.const 1)))
+        (br $game_loop)
+      )
     )
   )
   (start $main)
