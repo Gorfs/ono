@@ -57,6 +57,7 @@
   (xmlm
    (>= 1.4.0))
   z3
+  raylib
   ;; doc
   (odoc
    (and
