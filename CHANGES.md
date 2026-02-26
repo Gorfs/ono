@@ -6,7 +6,7 @@
 
 # 0.2 - 2026-01-31
 
-- add preliminary function
+- add concrete preliminary function
 
 # 0.3 - 2026-02-11
 
@@ -14,4 +14,4 @@
 
 # 0.4 - 2026-02-26
 
-- add preliminary function for symbolique execution
+- add preliminary function for symbolic interpretor
