@@ -95,3 +95,7 @@ let source_file =
   let doc = "Source file to analyze." in
   Arg.(
     required & pos 0 (some existing_file_conv) None (info [] ~doc ~docv:"FILE"))
+
+let no_stop_at_failure =
+  let doc = "Don't stop at the first failure, but continue to explore." in
+  Arg.(value & flag (info [ "no-stop-at-failure" ] ~doc))

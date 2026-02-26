@@ -9,13 +9,17 @@ let i32_symbol () : Kdo.Symbolic.I32.t Kdo.Symbolic.Choice.t =
     Kdo.Symbolic.I32.symbol
 
 let read_int () : Kdo.Symbolic.I32.t Kdo.Symbolic.Choice.t =
-  Printf.printf "Please enter an integer: ";
   try
-    let n = read_int () in
+    let line = input_line stdin in
+    let n = int_of_string (String.trim line) in
     Kdo.Symbolic.Choice.return (Kdo.Symbolic.I32.of_int n)
-  with Failure _ ->
-    Logs.app (fun m -> m "Invalid input, returning 0.");
-    Kdo.Symbolic.Choice.return Kdo.Symbolic.I32.zero
+  with
+  | End_of_file ->
+      Logs.err (fun m -> m "End of input while reading integer, returning 0.");
+      Kdo.Symbolic.Choice.return Kdo.Symbolic.I32.zero
+  | Failure _ ->
+      Logs.err (fun m -> m "Invalid input, returning 0.");
+      Kdo.Symbolic.Choice.return Kdo.Symbolic.I32.zero
 
 let m =
   let open Kdo.Symbolic.Extern_func in

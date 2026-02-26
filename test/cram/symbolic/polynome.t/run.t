@@ -1,19 +1,22 @@
-On compile et on lance le solveur avec les coefficients 1, -7, 14, -8.
-Le polynôme est x^3 - 7x^2 + 14x - 8 = 0. Les racines sont 1, 2, et 4.
-
-  $ cat > input.txt <<EOF
-  > 1
-  > -7
-  > 14
-  > -8
-  > EOF
-
-  $ ono symbolic polynome.wat < input.txt
-  Please enter an integer: Please enter an integer: Please enter an integer: Please enter an integer: ono: [ERROR] Trap: unreachable
+Test polynomial x^3 - 6x^2 + 11x - 6 = (x-1)(x-2)(x-3), roots are 1, 2, 3:
+  $ printf "1\n-6\n11\n-6\n" | ono symbolic polynome.wat --no-stop-at-failure
+  ono: [ERROR] Trap: unreachable
   model {
-    symbol symbol_0 i32 4
+    symbol symbol_0 i32 1
   }
-  breadcrumbs 1
+  breadcrumbs 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
 
-  ono: [ERROR] owi error: Reached problem!
+  ono: [ERROR] Trap: unreachable
+  model {
+    symbol symbol_0 i32 2
+  }
+  breadcrumbs 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+
+  ono: [ERROR] Trap: unreachable
+  model {
+    symbol symbol_0 i32 3
+  }
+  breadcrumbs 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+
+  ono: [ERROR] owi error: Reached 3 problems!
   [123]
