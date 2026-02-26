@@ -1,7 +1,7 @@
 Check that branching works:
   $ ono symbolic branching_false.wat -vv
   ono: [INFO] Parsing file branching_false.wat...
-  ono: [DEBUG] Parsed module is:  
+  ono: [DEBUG] Parsed module is:
                (module
                  (import "ono" "i32_symbol" (func $i32_symbol  (result i32)))
                  (import "ono" "print_i32" (func $print_i32  (param i32)))
@@ -22,7 +22,7 @@ Check that branching works:
                  (start $main)
                )
   ono: [INFO] Compiling to Wasm...
-  ono: [DEBUG] Compiled module is:  
+  ono: [DEBUG] Compiled module is:
                (module
                  (import "ono" "i32_symbol" (func $i32_symbol  (result i32)))
                  (import "ono" "print_i32" (func $print_i32  (param i32)))
@@ -53,11 +53,12 @@ Check that branching works:
     symbol symbol_0 i32 1073741824
   }
   breadcrumbs 0
+
   ono: [ERROR] owi error: Reached problem!
   [123]
   $ ono symbolic branching_true.wat -vv
   ono: [INFO] Parsing file branching_true.wat...
-  ono: [DEBUG] Parsed module is:  
+  ono: [DEBUG] Parsed module is:
                (module
                  (import "ono" "i32_symbol" (func $i32_symbol  (result i32)))
                  (import "ono" "print_i32" (func $print_i32  (param i32)))
@@ -78,7 +79,7 @@ Check that branching works:
                  (start $main)
                )
   ono: [INFO] Compiling to Wasm...
-  ono: [DEBUG] Compiled module is:  
+  ono: [DEBUG] Compiled module is:
                (module
                  (import "ono" "i32_symbol" (func $i32_symbol  (result i32)))
                  (import "ono" "print_i32" (func $print_i32  (param i32)))
@@ -109,5 +110,6 @@ Check that branching works:
     symbol symbol_0 i32 0
   }
   breadcrumbs 1
+
   ono: [ERROR] owi error: Reached problem!
   [123]
