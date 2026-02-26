@@ -1,17 +1,17 @@
 (module
-  ;; 1. Imports
+  ;; WE import the "ono" module which provides the necessary functions for symbolic execution, like the read_int
   (func $read_int (import "ono" "read_int") (result i32))
   (func $symbol_int (import "ono" "i32_symbol") (result i32))
 
   (func $main
-    ;; 2. Variables locales
+    ;; THe wariable for the coefficients and the symbolic variable
     (local $a i32)
     (local $b i32)
     (local $c i32)
     (local $d i32)
     (local $x i32)
 
-    ;; 3. Lecture des coefficients entrés par l'utilisateur
+    ;; REad the coefficients a, b, c, d from the user
     call $read_int
     local.set $a
     call $read_int
@@ -21,12 +21,11 @@
     call $read_int
     local.set $d
 
-    ;; 4. Création de la variable symbolique X
+    ;; create a symbolic variable x
     call $symbol_int
     local.set $x
 
-    ;; 5. Calcul du polynôme : ax^3 + bx^2 + cx + d
-    ;; Utilisation de la méthode de Horner : ((a*x + b)*x + c)*x + d
+    ;; CalCulate the value of the polynomial ax^3 + bx^2 + cx + d
 
     local.get $a
     local.get $x
@@ -47,11 +46,11 @@
     local.get $d
     i32.add         ;; ax^3 + bx^2 + cx + d
 
-    ;; 6. Vérification : est-ce égal à 0 ?
+    ;; Check if the result is equal to 0
     i32.const 0
     i32.eq
 
-    ;; 7. Piège : Si c'est égal à 0, on provoque une erreur "unreachable"
+    ;; If the plly is equal to 0 we have found a root, which is a failure case for this test, so we call unreachable
     (if
       (then
         unreachable
