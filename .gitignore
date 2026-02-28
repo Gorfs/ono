@@ -6,4 +6,5 @@ _opam
 .vscode
 .idea
 *.log
+.actrc
 Personal_notes.md
