@@ -30,7 +30,7 @@ let m (use_graphical_window : bool) (steps : int) (display_last : int) =
   in
   let functions =
     if use_graphical_window then
-      List.append baseInstructions Concrete_ono_gui.functions
+      List.append baseInstructions (Concrete_ono_gui.get_gui_functions ())
     else List.append baseInstructions Concrete_ono_text.functions
   in
   {
