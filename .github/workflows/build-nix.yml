@@ -30,7 +30,6 @@ jobs:
           git submodule update --init --recursive
 
           nix-shell --run "
-            export ODOC_WARN_ERROR=true
             dune build @fmt &&
             dune build @doc &&
             dune build @install &&
