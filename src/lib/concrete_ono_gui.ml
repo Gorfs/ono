@@ -25,11 +25,12 @@ let gui_print_cell (cell : Kdo.Concrete.I32.t) : (unit, Owi.Result.err) Result.t
   end;
   Ok ()
 
-let functions =
+let get_gui_functions () =
   let open Kdo.Concrete.Extern_func in
   let open Kdo.Concrete.Extern_func.Syntax in
   begin
-    Raylib.init_window 2120 1080 "raylib [core] example - basic window";
+    Raylib.init_window 2120 1080 "Ono GUI";
+    Raylib.set_trace_log_level Raylib.TraceLogLevel.Error;
     [
       ("newline", Extern_func (unit ^->. unit, gui_newline));
       ("clear_screen", Extern_func (unit ^->. unit, gui_clear_screen));
