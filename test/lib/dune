@@ -1,0 +1,6 @@
+(test
+ (name test)
+ (libraries ono qcheck)
+ (modules test)
+ (instrumentation
+  (backend bisect_ppx)))

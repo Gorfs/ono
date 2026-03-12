@@ -58,6 +58,7 @@
    (>= 1.4.0))
   z3
   raylib
+  (qcheck :with-test)
   ;; doc
   (odoc
    (and
