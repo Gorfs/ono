@@ -26,7 +26,8 @@ let run ~source_file use_graphical_window steps display_last config_file speed =
 
   let link_state =
     Kdo.Link.Extern.modul
-      (Concrete_ono_module.m use_graphical_window steps display_last config_file speed)
+      (Concrete_ono_module.m use_graphical_window steps display_last config_file
+         speed)
       link_state ~name:"ono"
   in
   let name = Some (Fpath.to_string source_file) in

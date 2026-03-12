@@ -51,8 +51,8 @@ let m (use_graphical_window : bool) (steps : int) (display_last : int)
           ( unit ^->. i32,
             fun () -> Ok (Kdo.Concrete.I32.of_int (Array.length grid)) ) );
       ( "get_speed",
-        Extern_func (unit ^->. i32,
-            fun () -> Ok (Kdo.Concrete.I32.of_int (speed))));
+        Extern_func (unit ^->. i32, fun () -> Ok (Kdo.Concrete.I32.of_int speed))
+      );
     ]
   in
   let functions =

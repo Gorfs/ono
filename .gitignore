@@ -6,5 +6,6 @@ _opam
 .vscode
 .idea
 *.log
+.DS_Store
 .actrc
 Personal_notes.md

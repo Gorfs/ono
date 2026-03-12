@@ -20,7 +20,7 @@ let test_text_functions_names () =
 (* === Concrete_ono_module === *)
 
 let test_module_text_mode_function_count () =
-  let m = Ono.Concrete_ono_module.m false 0 0 "" 1000 in
+  let m = Ono.Concrete_ono_module.m false 0 0 "" 0 in
   let fns = m.Owi.Extern.Module.functions in
   (* base: random_i32, get_steps, get_display_last, sleep,
            get_grid_cell, get_grid_width, get_grid_height, get_speed
@@ -29,7 +29,7 @@ let test_module_text_mode_function_count () =
   Alcotest.(check int) "text mode has 14 functions" 14 (List.length fns)
 
 let test_module_text_mode_has_base_functions () =
-  let m = Ono.Concrete_ono_module.m false 0 0 "" 1000 in
+  let m = Ono.Concrete_ono_module.m false 0 0 "" 0 in
   let names = List.map fst m.Owi.Extern.Module.functions in
   Alcotest.(check bool) "has random_i32" true (List.mem "random_i32" names);
   Alcotest.(check bool) "has get_steps" true (List.mem "get_steps" names);

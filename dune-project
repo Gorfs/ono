@@ -58,7 +58,8 @@
    (>= 1.4.0))
   z3
   raylib
-  (alcotest :with-test)
+  (qcheck :with-test)
+  (stdio :with-test)
   ;; doc
   (odoc
    (and
