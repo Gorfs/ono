@@ -1,7 +1,7 @@
 (module
   (import "ono" "get_steps" (func $get_steps (result i32)))
   (import "ono" "random_i32" (func $random (result i32)))
-  (import "ono" "print_cell" (func $cell_print (param i32)))
+  (import "ono" "cell_print" (func $cell_print (param i32)))
   (import "ono" "newline" (func $newline))
   (import "ono" "clear_screen" (func $clear_screen))
   (import "ono" "sleep" (func $sleep (param i32)))
