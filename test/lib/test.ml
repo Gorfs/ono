@@ -1,7 +1,10 @@
 open Ono
 open QCheck
 
-let read_int_fixture = "test/cram/concrete/read_int.t/readint.wat"
+let read_int_fixture =
+  Filename.concat
+    (Filename.dirname Sys.executable_name)
+    "../cram/concrete/read_int.t/readint.wat"
 
 let with_stdin_from_string (content : string) (f : unit -> 'a) : 'a =
   let input_file = Filename.temp_file "ono-stdin" ".txt" in
