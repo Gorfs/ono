@@ -31,12 +31,16 @@ pkgs.mkShell {
     odig
     odoc
     sedlex
+    logs
+    dune-build-info
+    dune-site
   ];
   buildInputs = with pkgs.ocamlPackages; [
     bos
     cmdliner
     fpath
     menhirLib
+    qcheck
     raylib
     smtml
     pkgs.owi

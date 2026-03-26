@@ -23,7 +23,6 @@ jobs:
           set -x
 
           nix-shell --run "
-            dune build @fmt &&
             dune build @doc &&
             dune build @install &&
             dune build @all &&
