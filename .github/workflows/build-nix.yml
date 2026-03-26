@@ -10,24 +10,17 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    container:
-      image: nixos/nix:latest
     steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v31
+
       - name: test
         run: |
           set -x
-
-          git clone https://github.com/${{ github.repository }}.git
-          cd $(basename ${{ github.repository }})
-
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            git fetch origin pull/${{ github.event.pull_request.number }}/head:pr-${{ github.event.pull_request.number }}
-            git checkout pr-${{ github.event.pull_request.number }}
-          else
-            git checkout ${{ github.ref_name }}
-          fi
-
-          git submodule update --init --recursive
 
           nix-shell --run "
             dune build @fmt &&
@@ -37,6 +30,7 @@ jobs:
             dune runtest
           "
 
-          nix-shell -p git --run "
-            git diff --exit-code ono.opam
-          "
+      - name: Check generated opam is up-to-date
+        run: |
+          set -x
+          nix-shell -p git --run "git diff --exit-code ono.opam"
