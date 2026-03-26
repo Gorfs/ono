@@ -187,13 +187,13 @@
           (local.get $i)
           (i32.load8_u (i32.add (local.get $i) (i32.const 4500))))
         (local.set $i (i32.add (local.get $i) (i32.const 1)))
-        (br_if $continue_copy (i32.lt_s (local.get $i) (i32.const 4500)))
+        (br_if $continue_copy (i32.lt_s (local.get $i) (i32.mul (global.get $WIDTH) (global.get $HEIGHT))))
       )
     )
   )
 
 
-  (func $main (export "main")
+  (func $propriete1 (export "propriete1")
     (local $i i32)
     (local.set $i (i32.const 0))
     (call $init_grid)
@@ -205,5 +205,151 @@
       return
     ))
   )
-  (start $main)
+
+  (func $propriete2 (export "propriete2")
+    (local $i i32)
+    (local $j i32)
+    (local $found i32)
+    (local $alive1 i32)
+    (local $alive2 i32)
+    (local $alive3 i32)
+    (local $alive4 i32)
+
+    (local.set $i (i32.const 0))
+    (local.set $found (i32.const 0))
+    (call $init_grid)
+    (call $step)
+
+    ;; une boucle qui vérifie si il y a quelque part un carré de 2x2 vivant
+    (block $break_i
+      (loop $continue_i
+        (local.set $j (i32.const 0))
+        (block $break_j
+          (loop $continue_j
+            (local.set $alive1 (call $is_alive (local.get $i) (local.get $j)))
+            (local.set $alive2 (call $is_alive (i32.add (local.get $i) (i32.const 1)) (local.get $j)))
+            (local.set $alive3 (call $is_alive (local.get $i) (i32.add (local.get $j) (i32.const 1))))
+            (local.set $alive4 (call $is_alive (i32.add (local.get $i) (i32.const 1)) (i32.add (local.get $j) (i32.const 1))))
+
+            (if (i32.and (i32.and (local.get $alive1) (local.get $alive2)) (i32.and (local.get $alive3) (local.get $alive4)))
+              (then
+                (local.set $found (i32.const 1))
+              )
+            )
+
+            (local.set $j (i32.add (local.get $j) (i32.const 1)))
+            (br_if $continue_j (i32.lt_s (local.get $j) (i32.sub (global.get $WIDTH) (i32.const 1))))
+          )
+        )
+        (local.set $i (i32.add (local.get $i) (i32.const 1)))
+        (br_if $continue_i (i32.lt_s (local.get $i) (i32.sub (global.get $HEIGHT) (i32.const 1))))
+      )
+    )
+
+    (local.get $found)
+    (if (then
+      unreachable
+    ) (else
+      return
+    ))
+  )
+
+  (func $propriete3 (export "propriete3")
+    (local $i i32)
+    (local $len i32)
+    (local $matched i32)
+    (local $changed i32)
+
+    (call $init_grid)
+
+    ;; Save original grid at offset 2000
+    (local.set $i (i32.const 0))
+    (local.set $len (i32.mul (global.get $WIDTH) (global.get $HEIGHT)))
+    (block $break_save
+      (loop $continue_save
+        (i32.store8
+          (i32.add (local.get $i) (i32.const 2000))
+          (i32.load8_u (local.get $i))
+        )
+        (local.set $i (i32.add (local.get $i) (i32.const 1)))
+        (br_if $continue_save (i32.lt_s (local.get $i) (local.get $len)))
+      )
+    )
+
+    ;; 1st step
+    (call $step)
+
+    ;; Save intermediate grid at offset 3000 to check if it actually changed
+    (local.set $i (i32.const 0))
+    (block $break_save_inter
+      (loop $continue_save_inter
+        (i32.store8
+          (i32.add (local.get $i) (i32.const 3000))
+          (i32.load8_u (local.get $i))
+        )
+        (local.set $i (i32.add (local.get $i) (i32.const 1)))
+        (br_if $continue_save_inter (i32.lt_s (local.get $i) (local.get $len)))
+      )
+    )
+
+    ;; Check if it changed after the 1st step compared to the original
+    (local.set $i (i32.const 0))
+    (local.set $changed (i32.const 0))
+    (block $break_cmp_inter
+      (loop $continue_cmp_inter
+        (if (i32.ne (i32.load8_u (i32.add (local.get $i) (i32.const 3000))) (i32.load8_u (i32.add (local.get $i) (i32.const 2000))))
+          (then
+            (local.set $changed (i32.const 1))
+          )
+        )
+        (local.set $i (i32.add (local.get $i) (i32.const 1)))
+        (br_if $continue_cmp_inter (i32.lt_s (local.get $i) (local.get $len)))
+      )
+    )
+
+    ;; EXTRA: check that it does not die (all 0) at step 1
+    (local.set $i (i32.const 0))
+    (local.set $matched (i32.const 0)) ;; temp use matched as a "has alive cell" boolean
+    (block $break_check_alive
+      (loop $continue_check_alive
+        (if (i32.eq (i32.load8_u (i32.add (local.get $i) (i32.const 3000))) (i32.const 1))
+          (then
+            (local.set $matched (i32.const 1))
+          )
+        )
+        (local.set $i (i32.add (local.get $i) (i32.const 1)))
+        (br_if $continue_check_alive (i32.lt_s (local.get $i) (local.get $len)))
+      )
+    )
+    (if (i32.eq (local.get $matched) (i32.const 0))
+      (then (local.set $changed (i32.const 0))) ;; cancel out changed if it just died
+    )
+
+    ;; 2nd step
+    (call $step)
+
+    ;; Check if current grid matches the original grid
+    (local.set $i (i32.const 0))
+    (local.set $matched (i32.const 1))
+    (block $break_cmp_final
+      (loop $continue_cmp_final
+        (if (i32.ne (i32.load8_u (local.get $i)) (i32.load8_u (i32.add (local.get $i) (i32.const 2000))))
+          (then
+            (local.set $matched (i32.const 0))
+          )
+        )
+        (local.set $i (i32.add (local.get $i) (i32.const 1)))
+        (br_if $continue_cmp_final (i32.lt_s (local.get $i) (local.get $len)))
+      )
+    )
+
+    (if (i32.and (local.get $matched) (local.get $changed))
+      (then
+        unreachable
+      )
+    )
+    (return)
+  )
+
+  (start $propriete3)
 )
