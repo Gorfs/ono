@@ -12,9 +12,13 @@ let
       hash = "sha256-ZS+SVmpmvUP2V3DTQ5+QNjFWgj3O3vFIST5c7CifIos=";
     };
   });
+  cmdliner =
+    if builtins.hasAttr "cmdliner_2_1_0" pkgs.ocamlPackages
+    then pkgs.ocamlPackages.cmdliner_2_1_0
+    else pkgs.ocamlPackages.cmdliner;
   owiSubShell = import ./vendor/owi/shell.nix { inherit pkgs; };
 in
-
+assert pkgs.lib.versionAtLeast cmdliner.version "2.0.0";
 pkgs.mkShell {
   name = "ono-dev-shell";
   dontDetectOcamlConflicts = true;
@@ -31,18 +35,15 @@ pkgs.mkShell {
     odig
     odoc
     sedlex
-    logs
-    dune-build-info
-    dune-site
   ];
   buildInputs = with pkgs.ocamlPackages; [
     bos
     cmdliner
     fpath
     menhirLib
-    qcheck
-    raylib
     smtml
     pkgs.owi
+    pkgs.ocamlPackages.raylib  
+    pkgs.ocamlPackages.qcheck
   ];
 }
