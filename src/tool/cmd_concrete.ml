@@ -9,7 +9,7 @@ let seed_generator seed =
 let info = Cmd.info "concrete" ~exits
 
 let normalize_option_int x =
-  match x with None -> 0 | Some n when n < 0 -> 0 | Some n -> n
+  match x with None -> 10 | Some n when n < 0 -> 10 | Some n -> n
 
 let normalize_option_bool x = match x with None -> false | Some b -> b
 
