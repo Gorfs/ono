@@ -34,6 +34,7 @@ jobs:
           eval "$(opam env)"
           export OPAMCONFIRMLEVEL=unsafe-yes
           opam update
+          opam upgrade
           apt update
 
           # Install system and opam-repo dependencies

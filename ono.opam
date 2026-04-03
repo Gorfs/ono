@@ -27,6 +27,7 @@ depends: [
   "xmlm" {>= "1.4.0"}
   "z3"
   "raylib"
+  "qcheck" {with-test}
   "odoc" {>= "3.0.0" & with-doc}
 ]
 build: [
