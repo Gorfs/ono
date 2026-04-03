@@ -3,8 +3,8 @@
   (func $newline    (import "ono" "newline"))
   (func $get_grid_cell (import "ono" "get_grid_cell") (param i32) (result i32))
 
-  (global $WIDTH i32 (i32.const 5))
-  (global $HEIGHT i32 (i32.const 5))
+  (global $WIDTH i32 (i32.const 8))
+  (global $HEIGHT i32 (i32.const 8))
 
   (memory (export "memory") 1)
 
