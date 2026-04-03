@@ -13,6 +13,9 @@ let normalize_option_int x =
 
 let normalize_option_bool x = match x with None -> false | Some b -> b
 
+let normalize_option_fpath x =
+  match x with None -> "" | Some p -> Fpath.to_string p
+
 let term =
   let open Term.Syntax in
   let+ () = setup_log
@@ -20,13 +23,14 @@ let term =
   and+ source_file = source_file
   and+ use_graphical_window = use_graphical_window
   and+ steps = steps
-  and+ display_last = display_last in
-  (* and+ config_file = config_file in *)
+  and+ display_last = display_last
+  and+ config_file = config_file in
   seed_generator seed;
   Ono.Concrete_driver.run ~source_file
     (normalize_option_bool use_graphical_window)
     (normalize_option_int steps)
     (normalize_option_int display_last)
+    (normalize_option_fpath config_file)
   |> function
   | Ok () -> Ok ()
   | Error e -> Error (`Msg (Kdo.R.err_to_string e))
