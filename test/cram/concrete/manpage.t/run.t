@@ -11,6 +11,9 @@ Test the output of the man page:
              Source file to analyze.
   
   OPTIONS
+         --config=FILE
+             Initial configuration file.
+  
          --display-last=N
              Only display the last N configurations.
   
@@ -20,7 +23,7 @@ Test the output of the man page:
          --steps=N
              Number of simulation steps to run.
   
-         --use-graphical-window=BOOL
+         --use-graphical-window=VAL
              Use a graphical window for output.
   
   COMMON OPTIONS
