@@ -5,9 +5,12 @@
   (import "ono" "newline" (func $newline))
   (import "ono" "clear_screen" (func $clear_screen))
   (import "ono" "sleep" (func $sleep (param i32)))
+  (import "ono" "get_grid_width" (func $get_grid_width (result i32)))
+  (import "ono" "get_grid_height" (func $get_grid_height (result i32)))
+  (import "ono" "get_grid_cell" (func $get_grid_cell (param i32) (result i32)))
 
-  (global $WIDTH i32 (i32.const 69))
-  (global $HEIGHT i32 (i32.const 34))
+  (global $WIDTH (mut i32) (i32.const 0))
+  (global $HEIGHT (mut i32) (i32.const 0))
 
   (memory (export "memory") 1)
 
@@ -119,7 +122,6 @@
     (local $i i32)
     (local $j i32)
     (local $index i32)
-    (local $nb_rand i32)
     (local $cell i32)
 
     (local.set $i (i32.const 0))
@@ -127,26 +129,37 @@
     (block $break_i
       (loop $continue_i
 
-      (local.set $j (i32.const 0))
+        (local.set $j (i32.const 0))
         (block $break_j
           (loop $continue_j
 
-          (local.set $index (call $coord_to_index (local.get $i) (local.get $j)))
+            (local.set $index
+              (call $coord_to_index (local.get $i) (local.get $j))
+            )
 
-          (local.set $nb_rand (call $random))
-          (local.set $nb_rand (i32.rem_u (local.get $nb_rand) (i32.const 100))) ;; 10% de chance de créer une cellule vivante
-          (if (i32.gt_s (local.get $nb_rand) (i32.const 90))
-            (then (local.set $cell (i32.const 1 )))
-            (else (local.set $cell (i32.const 0 )))
-          )
-          (i32.store8 (local.get $index) (local.get $cell))
-          (local.set $j (i32.add (local.get $j) (i32.const 1)))
-          (br_if $continue_j (i32.lt_s (local.get $j) (global.get $WIDTH)))
+            (local.set $cell
+              (call $get_grid_cell (local.get $index))
+            )
+
+            (i32.store8 (local.get $index) (local.get $cell))
+
+            (local.set $j
+              (i32.add (local.get $j) (i32.const 1))
+            )
+
+            (br_if $continue_j
+              (i32.lt_s (local.get $j) (global.get $WIDTH))
+            )
           )
         )
 
-      (local.set $i (i32.add (local.get $i) (i32.const 1)))
-      (br_if $continue_i (i32.lt_s (local.get $i) (global.get $HEIGHT)))
+        (local.set $i
+          (i32.add (local.get $i) (i32.const 1))
+        )
+
+        (br_if $continue_i
+          (i32.lt_s (local.get $i) (global.get $HEIGHT))
+        )
       )
     )
   )
@@ -243,9 +256,15 @@
     (call $sleep (i32.const 1))
   )
 
+  (func $load_config
+    (global.set $WIDTH (call $get_grid_width))
+    (global.set $HEIGHT (call $get_grid_height))
+  )
+
   (func $main (export "main")
     (local $steps i32)
     (local $i i32)
+    (call $load_config)
     (call $clear_screen)
     (local.set $steps (call $get_steps))  ;; récupère le nb de steps
     (local.set $i (i32.const 0))

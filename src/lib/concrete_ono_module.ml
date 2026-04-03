@@ -39,6 +39,18 @@ let m (use_graphical_window : bool) (steps : int) (display_last : int)
               let i = idx / width in
               let j = idx mod width in
               Ok (Kdo.Concrete.I32.of_int grid.(i).(j)) ) );
+      ( "get_grid_width",
+        Extern_func
+          ( unit ^->. i32,
+            fun () ->
+              let w =
+                if Array.length grid = 0 then 0 else Array.length grid.(0)
+              in
+              Ok (Kdo.Concrete.I32.of_int w) ) );
+      ( "get_grid_height",
+        Extern_func
+          ( unit ^->. i32,
+            fun () -> Ok (Kdo.Concrete.I32.of_int (Array.length grid)) ) );
     ]
   in
   let functions =
