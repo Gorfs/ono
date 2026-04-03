@@ -24,7 +24,7 @@ let load_file filename =
 
              Array.init width (fun j ->
                  match line.[j] with
-                 | '1' -> 1
-                 | '0' -> 0
+                 | '@' -> 1
+                 | '.' -> 0
                  | _ -> failwith "Invalid character"))
            lines)
