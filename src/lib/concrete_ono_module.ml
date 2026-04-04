@@ -6,11 +6,14 @@ let sleep (duration : Kdo.Concrete.I32.t) : (unit, Owi.Result.err) Result.t =
   Unix.sleepf (float_of_int (Kdo.Concrete.I32.to_int duration) /. 1000.0);
   Ok ()
 
-let m (use_graphical_window : bool) (steps : int) (display_last : int) =
+let m (use_graphical_window : bool) (steps : int) (display_last : int)
+    (config_file : string) =
   let casted_steps = Int32.of_int steps in
   let casted_display_last = Int32.of_int display_last in
   let open Kdo.Concrete.Extern_func in
   let open Kdo.Concrete.Extern_func.Syntax in
+  let open Config_parser in
+  let grid = if config_file = "" then [||] else load_file config_file in
   let baseInstructions =
     [
       ("random_i32", Extern_func (unit ^->. i32, random_i32));
@@ -26,6 +29,27 @@ let m (use_graphical_window : bool) (steps : int) (display_last : int) =
         Extern_func
           (i32 ^->. unit, fun (duration : Kdo.Concrete.I32.t) -> sleep duration)
       );
+      ( "get_grid_cell",
+        Extern_func
+          ( i32 ^->. i32,
+            fun idx ->
+              let idx = Kdo.Concrete.I32.to_int idx in
+              let width = Array.length grid.(0) in
+              let i = idx / width in
+              let j = idx mod width in
+              Ok (Kdo.Concrete.I32.of_int grid.(i).(j)) ) );
+      ( "get_grid_width",
+        Extern_func
+          ( unit ^->. i32,
+            fun () ->
+              let w =
+                if Array.length grid = 0 then 0 else Array.length grid.(0)
+              in
+              Ok (Kdo.Concrete.I32.of_int w) ) );
+      ( "get_grid_height",
+        Extern_func
+          ( unit ^->. i32,
+            fun () -> Ok (Kdo.Concrete.I32.of_int (Array.length grid)) ) );
     ]
   in
   let functions =

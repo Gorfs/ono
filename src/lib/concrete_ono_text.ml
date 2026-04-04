@@ -24,6 +24,16 @@ let text_read_int () : (Kdo.Concrete.I32.t, Owi.Result.err) Result.t =
           m "End_of_file while reading int from stdin; returning 0 as fallback.");
       Ok (Kdo.Concrete.I32.of_int32 0l)
 
+let text_newline () : (unit, Owi.Result.err) Result.t =
+  print_newline ();
+  Ok ()
+
+let text_print_cell (cell : Kdo.Concrete.I32.t) :
+    (unit, Owi.Result.err) Result.t =
+  let str = if cell = Kdo.Concrete.I32.zero then "." else "@" in
+  print_string str;
+  Ok ()
+
 let textSet =
   let open Concrete_ono_types in
   {
@@ -39,4 +49,6 @@ let functions =
     ("print_i32", Extern_func (i32 ^->. unit, textSet.print_i32));
     ("print_i64", Extern_func (i64 ^->. unit, textSet.print_i64));
     ("read_int", Extern_func (unit ^->. i32, textSet.read_int));
+    ("newline", Extern_func (unit ^->. unit, text_newline));
+    ("print_cell", Extern_func (i32 ^->. unit, text_print_cell));
   ]

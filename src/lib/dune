@@ -6,6 +6,7 @@
   concrete_ono_text
   concrete_ono_gui
   concrete_ono_types
+  config_parser
   error
   symbolic_driver
   symbolic_ono_module
