@@ -1,7 +1,7 @@
 (test
  (name test)
  (deps ../cram/concrete/read_int.t/readint.wat)
- (libraries ono qcheck)
- (modules test)
+ (libraries ono logs.fmt qcheck)
+ (modules test read_int_test)
  (instrumentation
   (backend bisect_ppx)))
