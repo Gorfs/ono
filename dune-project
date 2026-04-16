@@ -34,7 +34,7 @@
   (bos
    (>= 0.2.1))
   (cmdliner
-   (>= 1.3.0))
+   (= 2.1.0))
   (digestif
    (>= 1.2.0))
   (logs
@@ -57,6 +57,7 @@
   (xmlm
    (>= 1.4.0))
   z3
+  raylib
   ;; doc
   (odoc
    (and

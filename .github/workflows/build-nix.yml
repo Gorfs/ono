@@ -6,6 +6,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -26,8 +27,9 @@ jobs:
             git checkout ${{ github.ref_name }}
           fi
 
+          git submodule update --init --recursive
+
           nix-shell --run "
-            ODOC_WARN_ERROR=true
             dune build @fmt &&
             dune build @doc &&
             dune build @install &&

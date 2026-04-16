@@ -55,6 +55,7 @@ Check that branching works:
   breadcrumbs 0
   ono: [ERROR] owi error: Reached problem!
   [123]
+
   $ ono symbolic branching_true.wat -vv
   ono: [INFO] Parsing file branching_true.wat...
   ono: [DEBUG] Parsed module is:  
