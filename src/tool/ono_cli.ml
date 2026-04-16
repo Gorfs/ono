@@ -97,7 +97,7 @@ let source_file =
     required & pos 0 (some existing_file_conv) None (info [] ~doc ~docv:"FILE"))
 
 let speed =
-  let doc = "Time between two steps in miliseconds." in
+  let doc = "Time between two steps in milliseconds." in
   Arg.(value & opt (some int) None (info [ "speed" ] ~doc ~docv:"N"))
 
 let no_stop_at_failure =
