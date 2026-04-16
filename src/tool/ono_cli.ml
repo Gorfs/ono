@@ -96,6 +96,10 @@ let source_file =
   Arg.(
     required & pos 0 (some existing_file_conv) None (info [] ~doc ~docv:"FILE"))
 
+let speed =
+  let doc = "Time between two steps in miliseconds." in
+  Arg.(value & opt (some int) None (info [ "speed" ] ~doc ~docv:"N"))
+
 let no_stop_at_failure =
   let doc = "Don't stop at the first failure, but continue to explore." in
   Arg.(value & flag (info [ "no-stop-at-failure" ] ~doc))

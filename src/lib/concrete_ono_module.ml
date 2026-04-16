@@ -7,7 +7,8 @@ let sleep (duration : Kdo.Concrete.I32.t) : (unit, Owi.Result.err) Result.t =
   Ok ()
 
 let m (use_graphical_window : bool) (steps : int) (display_last : int)
-    (config_file : string) =
+    (config_file : string) (speed : int) =
+  ignore speed;
   let casted_steps = Int32.of_int steps in
   let casted_display_last = Int32.of_int display_last in
   let open Kdo.Concrete.Extern_func in
@@ -50,6 +51,9 @@ let m (use_graphical_window : bool) (steps : int) (display_last : int)
         Extern_func
           ( unit ^->. i32,
             fun () -> Ok (Kdo.Concrete.I32.of_int (Array.length grid)) ) );
+      ( "get_speed",
+        Extern_func (unit ^->. i32,
+            fun () -> Ok (Kdo.Concrete.I32.of_int (speed))));
     ]
   in
   let functions =

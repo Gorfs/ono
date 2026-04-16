@@ -1,7 +1,7 @@
 open Syntax
 module Interpret = Kdo.Interpret.Concrete (Kdo.Interpret.Default_parameters)
 
-let run ~source_file use_graphical_window steps display_last config_file =
+let run ~source_file use_graphical_window steps display_last config_file speed =
   (* Parsing. *)
   Logs.info (fun m -> m "Parsing file %a..." Fpath.pp source_file);
   let* wat_module = Kdo.Parse.Wat.Module.from_file source_file in
@@ -26,7 +26,7 @@ let run ~source_file use_graphical_window steps display_last config_file =
 
   let link_state =
     Kdo.Link.Extern.modul
-      (Concrete_ono_module.m use_graphical_window steps display_last config_file)
+      (Concrete_ono_module.m use_graphical_window steps display_last config_file speed)
       link_state ~name:"ono"
   in
   let name = Some (Fpath.to_string source_file) in
