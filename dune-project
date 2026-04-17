@@ -59,6 +59,7 @@
   z3
   raylib
   (qcheck :with-test)
+  (stdio :with-test)
   ;; doc
   (odoc
    (and

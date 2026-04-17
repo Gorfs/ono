@@ -28,6 +28,7 @@ depends: [
   "z3"
   "raylib"
   "qcheck" {with-test}
+  "stdio" {with-test}
   "odoc" {>= "3.0.0" & with-doc}
 ]
 build: [
