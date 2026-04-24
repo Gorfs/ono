@@ -1,8 +1,7 @@
-(executable
- (package ono)
- (public_name ono)
- (name ono_main)
- (modules cmd_concrete cmd_symbolic ono_cli ono_main)
+(library
+ (name ono_tool_lib)
+ (wrapped false)
+ (modules cmd_concrete cmd_symbolic ono_cli)
  (libraries
   bos
   cmdliner
@@ -14,5 +13,14 @@
   logs.cli
   logs.fmt
   ono)
+ (instrumentation
+  (backend bisect_ppx)))
+
+(executable
+ (package ono)
+ (public_name ono)
+ (name ono_main)
+ (modules ono_main)
+ (libraries ono_tool_lib)
  (instrumentation
   (backend bisect_ppx)))

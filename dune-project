@@ -10,17 +10,17 @@
 
 (license AGPL-3.0-or-later)
 
-(authors "TODO")
+(authors "Archie, Matheo, Valentin, Thibault, Merril")
 
-(maintainers "TODO")
+(maintainers "NA")
 
-(homepage "TODO")
+(homepage "NA")
 
-(bug_reports "TODO")
+(bug_reports "NA")
 
 (package
  (name ono)
- (synopsis "TODO")
+ (synopsis "See README.md")
  (depends
   (ocaml
    (>= 5.3))
@@ -58,6 +58,7 @@
    (>= 1.4.0))
   z3
   raylib
+  (alcotest :with-test)
   ;; doc
   (odoc
    (and
