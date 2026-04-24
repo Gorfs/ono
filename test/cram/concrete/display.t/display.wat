@@ -8,6 +8,7 @@
   (import "ono" "get_grid_width" (func $get_grid_width (result i32)))
   (import "ono" "get_grid_height" (func $get_grid_height (result i32)))
   (import "ono" "get_grid_cell" (func $get_grid_cell (param i32) (result i32)))
+  (import "ono" "get_speed" (func $get_speed (result i32)))
 
   (global $WIDTH (mut i32) (i32.const 0))
   (global $HEIGHT (mut i32) (i32.const 0))
@@ -253,7 +254,7 @@
         (br_if $continue_i (i32.lt_s (local.get $i) (global.get $HEIGHT)))
       )
     )
-    (call $sleep (i32.const 1))
+    (call $sleep (call $get_speed))
   )
 
   (func $load_config

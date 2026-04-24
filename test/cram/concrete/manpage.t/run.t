@@ -20,6 +20,9 @@ Test the output of the man page:
          --seed=SEED
              Seed for random number generation.
   
+         --speed=N
+             Time elapsed between two steps in milliseconds.
+  
          --steps=N
              Number of simulation steps to run.
   
