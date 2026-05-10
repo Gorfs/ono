@@ -240,7 +240,7 @@
         (br_if $continue_i (i32.lt_s (local.get $i) (global.get $HEIGHT)))
       )
     )
-    (call $sleep (i32.const 1))
+    (call $sleep (i32.const 1000))
   )
 
   (func $main (export "main")
