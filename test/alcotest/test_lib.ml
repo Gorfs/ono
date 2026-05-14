@@ -12,7 +12,11 @@ let test_text_functions_names () =
   Alcotest.(check (list string))
     "function names"
     [
-      "print_i32"; "print_i64"; "read_int"; "newline"; "clear_screen";
+      "print_i32";
+      "print_i64";
+      "read_int";
+      "newline";
+      "clear_screen";
       "print_cell";
     ]
     names

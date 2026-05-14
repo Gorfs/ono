@@ -19,8 +19,7 @@ val run :
       GUI; otherwise prints to stdout.
     - [steps]: number of simulation steps exposed to the Wasm module via
       [get_steps].
-    - [display_last]: only the last [display_last] configurations are
-      displayed.
+    - [display_last]: only the last [display_last] configurations are displayed.
     - [config_file]: path to the initial grid configuration, or [""] for an
       empty grid.
     - [speed]: delay between steps, in milliseconds. *)
