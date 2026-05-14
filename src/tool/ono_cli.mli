@@ -1,14 +1,35 @@
 (** Shared command-line plumbing for the [ono] executable.
 
-    Defines the outcome type, exit codes, common [Cmdliner] arguments and
-    the log setup used by both the concrete and symbolic subcommands. *)
+    Defines the outcome type, exit codes, common [Cmdliner] arguments and the
+    log setup used by both the concrete and symbolic subcommands. *)
 
 type outcome = (unit, [ Ono.Error.t | Cmdliner.Cmd.eval_error ]) Result.t
-(** What a subcommand evaluation returns: either [Ok ()] or a tagged error
-    from the ono runtime or from Cmdliner itself. *)
+(** What a subcommand evaluation returns: either [Ok ()] or a tagged error from
+    the ono runtime or from Cmdliner itself. *)
 
 val error_to_exit_code : Ono.Error.t -> int
 (** Maps an {!Ono.Error.t} to a stable process exit code (see {!exits}). *)
+
+val err_conversion_to_integer : int
+(** Exit code for conversion-to-integer errors. *)
+
+val err_unreachable : int
+(** Exit code for Wasm [unreachable] traps. *)
+
+val err_integer_divide_by_zero : int
+(** Exit code for integer division by zero. *)
+
+val err_integer_overflow : int
+(** Exit code for integer overflow. *)
+
+val err_call_stack_exhausted : int
+(** Exit code for call stack exhaustion. *)
+
+val err_out_of_bounds_memory_access : int
+(** Exit code for out-of-bounds memory accesses. *)
+
+val err_msg : int
+(** Exit code for generic command errors. *)
 
 val exits : Cmdliner.Cmd.Exit.info list
 (** Exit code documentation for the [ono] manpage, including Wasm runtime
@@ -46,5 +67,5 @@ val speed : int option Cmdliner.Term.t
 (** [--speed N] — delay between simulation steps, in milliseconds. *)
 
 val no_stop_at_failure : bool Cmdliner.Term.t
-(** [--no-stop-at-failure] — for symbolic execution, keep exploring after
-    the first failing path. *)
+(** [--no-stop-at-failure] — for symbolic execution, keep exploring after the
+    first failing path. *)
