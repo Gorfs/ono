@@ -1,13 +1,4 @@
-_build/.sandbox
-_build/default/.dune
-_build/default/.ppx
-_build/default/src
-_build/default/vendor
-_build/default/doc
-_build/default/test
-_build/default/.*
-_build/.*
-_build/log
+_build/
 *.coverage
 _coverage
 _opam
