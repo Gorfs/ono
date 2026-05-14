@@ -86,7 +86,8 @@ let suite =
         Alcotest.test_case ". maps to 0" `Quick test_load_dot_maps_to_zero;
         Alcotest.test_case "3x5 grid dimensions" `Quick
           test_load_larger_grid_dimensions;
-        Alcotest.test_case "single alive cell" `Quick test_load_single_cell_alive;
+        Alcotest.test_case "single alive cell" `Quick
+          test_load_single_cell_alive;
         Alcotest.test_case "single dead cell" `Quick test_load_single_cell_dead;
         Alcotest.test_case "empty file fails" `Quick test_load_empty_file_fails;
         Alcotest.test_case "unequal line lengths fails" `Quick
