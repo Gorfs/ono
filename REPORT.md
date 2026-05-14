@@ -69,6 +69,27 @@ dune exec -- ono symbolic config-generation/config-generation.wat
 
 ---
 
+## Benchmark
+
+Nous avons mesuré le temps d'exécution symbolique pour les trois premières propriétés de génération de configurations, sur une grille 4x4.
+
+**Paramètres du benchmark :**
+
+* **Source WAT :** `/Users/archie/fac/m1/s2/genie-logiciel-avance/ono/config-generation/config-generation.wat`
+* **Exécutable :** `/Users/archie/fac/m1/s2/genie-logiciel-avance/ono/_build/default/src/tool/ono_main.exe`
+* **Taille de grille :** 4x4
+* **Runs de chauffe par propriété :** 3
+* **Runs mesurés par propriété :** 10
+* **Statut de sortie attendu :** 123, car l'exécution symbolique atteint volontairement une instruction `unreachable`.
+
+| Propriété | Contrainte | Grille | Runs | Moyenne réelle | Médiane réelle | Min réel | Max réel | Statut |
+|-----------|------------|--------|------|----------------|----------------|----------|----------|--------|
+| 1 | cellule (1,1) vivante après 1 étape | 4x4 | 10/10 | 0.020s | 0.020s | 0.020s | 0.020s | ok |
+| 2 | bloc vivant 2x2 après 1 étape | 4x4 | 10/10 | 0.051s | 0.050s | 0.040s | 0.090s | ok |
+| 3 | oscillateur de période 2 | 4x4 | 10/10 | 1.947s | 1.945s | 1.900s | 2.010s | ok |
+
+---
+
 ## Travail Réalisé
 
 ### Première partie — Interpréteur concret
