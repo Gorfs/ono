@@ -4,6 +4,10 @@ _build/default/.ppx
 _build/default/src
 _build/default/vendor
 _build/default/doc
+_build/default/test
+_build/default/.*
+_build/.*
+_build/log
 *.coverage
 _coverage
 _opam
