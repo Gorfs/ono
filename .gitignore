@@ -1,4 +1,9 @@
-_build
+_build/.sandbox
+_build/default/.dune
+_build/default/.ppx
+_build/default/src
+_build/default/vendor
+_build/default/doc
 *.coverage
 _coverage
 _opam
