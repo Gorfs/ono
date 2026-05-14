@@ -11,6 +11,5 @@ type t =
   | `Integer_overflow
   | `Out_of_bounds_memory_access
   | `Unreachable ]
-(** All error tags ono can produce. Each non-[`Msg] tag corresponds to a
-    Wasm trap and is mapped to a dedicated process exit code by the CLI
-    layer. *)
+(** All error tags ono can produce. Each non-[`Msg] tag corresponds to a Wasm
+    trap and is mapped to a dedicated process exit code by the CLI layer. *)

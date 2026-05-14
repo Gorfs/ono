@@ -6,5 +6,5 @@
     This module is linked against the user program under the name ["ono"]. *)
 
 val m : Owi.Symbolic_extern_func.extern_func Owi.Extern.Module.t
-(** The extern module bundling all symbolic ono primitives, ready to be
-    passed to {!Owi.Link.Extern.modul}. *)
+(** The extern module bundling all symbolic ono primitives, ready to be passed
+    to {!Owi.Link.Extern.modul}. *)
