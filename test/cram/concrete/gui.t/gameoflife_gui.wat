@@ -1,5 +1,6 @@
 (module
   (import "ono" "get_steps" (func $get_steps (result i32)))
+  (import "ono" "get_display_last" (func $get_display_last (result i32)))
   (import "ono" "random_i32" (func $random (result i32)))
   (import "ono" "read_int" (func $read_int (result i32)))
   (import "ono" "print_cell" (func $cell_print (param i32)))
@@ -229,12 +230,14 @@
   (func $main (export "main")
     (local $steps i32)
     (local $i i32)
+    (local $ecart i32)
     (call $clear_screen)
     (global.set $WIDTH (call $read_int))
     (global.set $HEIGHT (call $read_int))
     (call $print_i32 (global.get $WIDTH))
     (call $newline)
     (local.set $steps (call $get_steps))
+    (local.set $ecart (i32.sub (local.get $steps) (call $get_display_last)))
     (call $print_i32 (global.get $HEIGHT))
     (call $newline)
     (local.set $i (i32.const 0))
@@ -244,9 +247,11 @@
     (block $break
       (loop $game_loop
         (br_if $break (i32.ge_s (local.get $i) (local.get $steps)))
-        (call $print_grid)
-        (call $print_i32 (local.get $i))
-        (call $newline)
+        (if (i32.ge_s (local.get $i) (local.get $ecart))
+          (then
+            (call $print_grid)
+            (call $print_i32 (local.get $i))
+            (call $newline)))
         (call $step)
         (local.set $i (i32.add (local.get $i) (i32.const 1)))
         (call $sleep (i32.const 100))
