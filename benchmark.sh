@@ -7,6 +7,33 @@ EXE="${EXE:-$ROOT_DIR/_build/default/src/tool/ono_main.exe}"
 RUNS="${RUNS:-10}"
 WARMUP="${WARMUP:-3}"
 EXPECTED_STATUS=123
+TMP_DIR="${TMPDIR:-/tmp}"
+
+detect_timer() {
+  if [ -n "${TIME_BIN:-}" ]; then
+    if [ ! -x "$TIME_BIN" ]; then
+      echo "TIME_BIN is set but is not executable: $TIME_BIN" >&2
+      exit 1
+    fi
+    TIMER_MODE="external"
+    TIMER_LABEL="$TIME_BIN"
+    return
+  fi
+
+  local candidate
+  for candidate in gtime time; do
+    candidate="$(command -v "$candidate" 2>/dev/null || true)"
+    if [ -n "$candidate" ] && [ -x "$candidate" ]; then
+      TIME_BIN="$candidate"
+      TIMER_MODE="external"
+      TIMER_LABEL="$TIME_BIN"
+      return
+    fi
+  done
+
+  TIMER_MODE="bash"
+  TIMER_LABEL="bash time keyword"
+}
 
 if [ ! -x "$EXE" ]; then
   echo "Building Ono executable: dune build src/tool/ono_main.exe" >&2
@@ -22,6 +49,8 @@ WIDTH="$(sed -nE 's/.*\(global \$WIDTH i32 \(i32.const ([0-9]+)\)\).*/\1/p' "$WA
 HEIGHT="$(sed -nE 's/.*\(global \$HEIGHT i32 \(i32.const ([0-9]+)\)\).*/\1/p' "$WAT_FILE" | head -1)"
 SIZE="${WIDTH:-?}x${HEIGHT:-?}"
 
+detect_timer
+
 make_wat_for_property() {
   local property="$1"
   local tmp="$2"
@@ -32,11 +61,24 @@ make_wat_for_property() {
 run_once() {
   local wat="$1"
   local out status real user sys
-  out="$({ /usr/bin/time -p "$EXE" symbolic "$wat" --no-stop-at-failure >/dev/null; printf 'status=%s\n' "$?"; } 2>&1)"
+  if [ "$TIMER_MODE" = "external" ]; then
+    out="$({ "$TIME_BIN" -p "$EXE" symbolic "$wat" --no-stop-at-failure >/dev/null; printf 'status=%s\n' "$?"; } 2>&1)"
+  else
+    out="$({ TIMEFORMAT=$'real %3R\nuser %3U\nsys %3S'; time "$EXE" symbolic "$wat" --no-stop-at-failure >/dev/null; printf 'status=%s\n' "$?"; } 2>&1)"
+  fi
   status="$(printf '%s\n' "$out" | sed -nE 's/^status=([0-9]+)$/\1/p' | tail -1)"
   real="$(printf '%s\n' "$out" | awk '/^real / {print $2}' | tail -1)"
   user="$(printf '%s\n' "$out" | awk '/^user / {print $2}' | tail -1)"
   sys="$(printf '%s\n' "$out" | awk '/^sys / {print $2}' | tail -1)"
+
+  if [ -z "$real" ] || [ -z "$user" ] || [ -z "$sys" ]; then
+    echo "Failed to parse timing output from $TIMER_LABEL." >&2
+    echo "Expected lines beginning with 'real ', 'user ', and 'sys '." >&2
+    echo "Raw timing output:" >&2
+    printf '%s\n' "$out" >&2
+    return 1
+  fi
+
   printf '%s %s %s %s\n' "${real:-nan}" "${user:-nan}" "${sys:-nan}" "${status:-unknown}"
 }
 
@@ -87,6 +129,7 @@ echo "Grid size: $SIZE"
 echo "Warmup runs per property: $WARMUP"
 echo "Measured runs per property: $RUNS"
 echo "Expected exit status: $EXPECTED_STATUS (symbolic execution reaches an intentional unreachable)"
+echo "Timer: $TIMER_LABEL"
 echo
 echo "| Propriete | Constraint | Grid | Runs | Real mean | Real median | Real min | Real max | Status |"
 echo "|-----------|------------|------|------|-----------|-------------|----------|----------|--------|"
@@ -98,16 +141,16 @@ for property in 1 2 3; do
     3) description="period-2 oscillator" ;;
   esac
 
-  tmp_wat="$(mktemp "/private/tmp/ono-config-prop${property}-wat.XXXXXX")"
-  tmp_results="$(mktemp "/private/tmp/ono-config-prop${property}-results.XXXXXX")"
+  tmp_wat="$(mktemp "$TMP_DIR/ono-config-prop${property}-wat.XXXXXX")"
+  tmp_results="$(mktemp "$TMP_DIR/ono-config-prop${property}-results.XXXXXX")"
   make_wat_for_property "$property" "$tmp_wat"
 
   for _ in $(seq 1 "$WARMUP"); do
-    run_once "$tmp_wat" >/dev/null
+    run_once "$tmp_wat" >/dev/null || exit 1
   done
 
   for _ in $(seq 1 "$RUNS"); do
-    run_once "$tmp_wat" >> "$tmp_results"
+    run_once "$tmp_wat" >> "$tmp_results" || exit 1
   done
 
   summarize "$property" "$description" "$tmp_results"
