@@ -15,15 +15,24 @@ let gui_print_i32 (n : Kdo.Concrete.I32.t) : (unit, Owi.Result.err) Result.t =
   Logs.app (fun m -> m "%a" Kdo.Concrete.I32.pp n);
   Ok ()
 
-let gui_clear_screen () : (unit, Owi.Result.err) Result.t =
+let clearScreen () =
   if !in_drawing then Raylib.end_drawing ();
   Raylib.begin_drawing ();
   Raylib.clear_background Raylib.Color.raywhite;
-  in_drawing := true;
+  in_drawing := true
+
+let gui_clear_screen () : (unit, Owi.Result.err) Result.t =
+  clearScreen ();
   drawn_cells := [];
   row := 1;
   column := 1;
   Ok ()
+
+let draw_frame f =
+  clearScreen ();
+  f ();
+  Raylib.end_drawing ();
+  in_drawing := false
 
 let draw_int_input_modal buf =
   Raylib.draw_rectangle 100 100 400 200 Raylib.Color.darkgray;
@@ -54,13 +63,6 @@ let handle_backspace buf =
   if Raylib.is_key_pressed Raylib.Key.Backspace && String.length buf > 0 then
     String.sub buf 0 (String.length buf - 1)
   else buf
-
-let draw_frame f =
-  Raylib.begin_drawing ();
-  Raylib.clear_background Raylib.Color.raywhite;
-  f ();
-  Raylib.end_drawing ();
-  in_drawing := false
 
 let poll_event buf =
   let buf = buf |> append_pressed_chars |> handle_backspace in
