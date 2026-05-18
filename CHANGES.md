@@ -18,6 +18,9 @@
 
 - add preliminary function for symbolic interpreter
 
+# 0.0.6 - 2026-05-18
+- refactored code in `concrete_ono_gui.ml` to avoid DRY infraction
+
 # 0.0.7 - 2026-05-18
 
 -- added default grid value of 1x1 grid
