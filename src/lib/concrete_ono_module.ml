@@ -6,6 +6,12 @@ let sleep (duration : Kdo.Concrete.I32.t) : (unit, Owi.Result.err) Result.t =
   Unix.sleepf (float_of_int (Kdo.Concrete.I32.to_int duration) /. 1000.0);
   Ok ()
 
+let get_default_grid config_file =
+  Logs.warn (fun m ->
+      m "Failed to load config file %s. Using default configuration. (1x1 grid)"
+        config_file);
+  [| [| 0 |] |]
+
 let m (use_graphical_window : bool) (steps : int) (display_last : int)
     (config_file : string) (speed : int) =
   let casted_steps = Int32.of_int steps in
@@ -13,7 +19,9 @@ let m (use_graphical_window : bool) (steps : int) (display_last : int)
   let open Kdo.Concrete.Extern_func in
   let open Kdo.Concrete.Extern_func.Syntax in
   let open Config_parser in
-  let grid = if config_file = "" then [||] else load_file config_file in
+  let grid =
+    try load_file config_file with Sys_error _ -> get_default_grid config_file
+  in
   let baseInstructions =
     [
       ("random_i32", Extern_func (unit ^->. i32, random_i32));
