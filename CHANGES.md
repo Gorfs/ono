@@ -28,6 +28,8 @@
 
 -- added default grid value of 1x1 grid
 
-# 0.0.9 - 2026-05-18
+# 0.0.8 - 2026-05-18
+ - Added documentation to report about how benchmarks were performed
 
+# 0.0.9 - 2026-05-18
 - added documentation to report about executing symbolic polynomial solver

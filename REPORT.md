@@ -85,6 +85,9 @@ dune exec -- ono symbolic config-generation/config-generation.wat
 
 Nous avons mesuré le temps d'exécution symbolique pour les trois premières propriétés de génération de configurations, sur une grille 4x4.
 
+Les benchmarks sont executer sur un Mac M2 air 8 coeurs, 8Go ram. 
+Ils sont fait avec le script shell `benchmark.sh`
+
 **Paramètres du benchmark :**
 
 * **Source WAT :** `/Users/archie/fac/m1/s2/genie-logiciel-avance/ono/config-generation/config-generation.wat`
@@ -92,7 +95,6 @@ Nous avons mesuré le temps d'exécution symbolique pour les trois premières pr
 * **Taille de grille :** 4x4
 * **Runs de chauffe par propriété :** 3
 * **Runs mesurés par propriété :** 10
-* **Statut de sortie attendu :** 123, car l'exécution symbolique atteint volontairement une instruction `unreachable`.
 
 | Propriété | Contrainte | Grille | Runs | Moyenne réelle | Médiane réelle | Min réel | Max réel | Statut |
 |-----------|------------|--------|------|----------------|----------------|----------|----------|--------|
