@@ -21,3 +21,7 @@
 # 0.0.7 - 2026-05-18
 
 -- added default grid value of 1x1 grid
+
+# 0.0.9 - 2026-05-18
+
+- added documentation to report about executing symbolic polynomial solver

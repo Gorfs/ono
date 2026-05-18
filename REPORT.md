@@ -41,6 +41,18 @@ dune exec -- ono concrete test/cram/concrete/gameoflife.t/game.wat --config doc/
 * `--seed 42` : Fixe la graine du générateur de nombres aléatoires (influence l'apparition aléatoire des cellules).
 * `--use-graphical-window true` : Active l'interface graphique Raylib (si `false`, le rendu se fait dans le terminal).
 
+### Lancer le solveur de polynômes
+
+Le solveur se trouve dans `test/cram/symbolic/polynome.t/polynome.wat`. Il résout les polynômes de la forme `ax^3 + bx^2 + cx + d` en lisant les coefficients `a`, `b`, `c` et `d` sur l'entrée standard, un entier par ligne. Il cherche ensuite les racines entières comprises entre `-100` et `100`.
+
+Depuis la racine du dépôt, on peut le lancer avec :
+
+```bash
+printf "1\n-6\n11\n-6\n" | dune exec -- ono symbolic test/cram/symbolic/polynome.t/polynome.wat --no-stop-at-failure
+```
+
+Cet exemple correspond au polynôme `x^3 - 6x^2 + 11x - 6`, dont les racines sont `1`, `2` et `3`. Chaque bloc `model` imprimé correspond à une racine : les lignes `symbol symbol_0 i32 1`, `symbol symbol_0 i32 2` et `symbol symbol_0 i32 3` indiquent les solutions trouvées. L'option `--no-stop-at-failure` est nécessaire pour continuer après une première racine et trouver les suivantes. Le code de sortie est non nul, par exemple `123`, car les racines sont signalées volontairement par une instruction `unreachable`.
+
 ---
 
 ## Génération de configurations (Exécution Symbolique)
