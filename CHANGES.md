@@ -15,3 +15,7 @@
 # 0.4 - 2026-02-26
 
 - add preliminary function for symbolic interpreter
+
+# 0.0.7 - 2026-05-18
+
+-- added default grid value of 1x1 grid
