@@ -47,7 +47,7 @@ dune exec -- ono concrete test/cram/concrete/gameoflife.t/game.wat --config doc/
 
 Le mode symbolique permet de trouver des configurations initiales répondant à des critères spécifiques.
 
-1. **Fichier source :** `test/cram/symbolic/config-generation.t/config-generation.wat`.
+1. **Fichier source :** `config-generation/config-generation.wat`.
 2. **Configuration :** Modifiez les valeurs `WIDTH` et `HEIGHT` (par défaut 4x4).
 > **Attention :** L'augmentation de la taille de la grille accroît considérablement le temps de calcul.
 
