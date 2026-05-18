@@ -1,5 +1,7 @@
 # unreleased
 
+- fix REPORT.md path for config-generation source file
+
 # 0.1 - 2025-12-16
 
 - first version
