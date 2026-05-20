@@ -21,3 +21,8 @@
 # 0.0.7 - 2026-05-18
 
 -- added default grid value of 1x1 grid
+
+# 0.6 - 2026-05-20
+
+- refactor GUI state management (removed `ref`, introduced `State` module)
+- update cram tests
