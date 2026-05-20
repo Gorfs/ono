@@ -56,8 +56,9 @@ let append_pressed_chars buf =
   loop buf
 
 let parse_int buf =
-  Option.value (int_of_string_opt (String.trim buf)) ~default:0
-  |> Kdo.Concrete.I32.of_int
+  match int_of_string_opt (String.trim buf) with
+  | Some n -> Ok (Kdo.Concrete.I32.of_int n)
+  | None -> Error (`Msg "Failed to parse integer from GUI input")
 
 let handle_backspace buf =
   if Raylib.is_key_pressed Raylib.Key.Backspace && String.length buf > 0 then
@@ -79,8 +80,8 @@ let gui_read_int () : (Kdo.Concrete.I32.t, Owi.Result.err) Result.t =
         draw_scene ();
         draw_int_input_modal buf);
     match poll_event buf with
-    | Quit -> Ok (parse_int "")
-    | Confirm -> Ok (parse_int buf)
+    | Quit -> Error (`Msg "GUI input cancelled")
+    | Confirm -> parse_int buf
     | Typing buf -> loop buf
   in
   let result = loop "" in
