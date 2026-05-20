@@ -1,28 +1,54 @@
 type input_event = Typing of string | Confirm | Quit
 
-let char_width = 30
-let row = ref 1
-let column = ref 1
-let in_drawing = ref false
-let drawn_cells = ref []
+module State = struct
+  type t = {
+    mutable row : int;
+    mutable column : int;
+    mutable in_drawing : bool;
+    mutable drawn_cells : (int * int * string) list;
+  }
 
-let gui_newline () : (unit, Owi.Result.err) Result.t =
-  column := 1;
-  row := !row + 1;
+  let create () = { row = 1; column = 1; in_drawing = false; drawn_cells = [] }
+
+  let newline s =
+    s.column <- 1;
+    s.row <- s.row + 1
+
+  let in_drawing s = s.in_drawing
+
+  let clear s ~in_drawing =
+    s.row <- 1;
+    s.column <- 1;
+    s.in_drawing <- in_drawing;
+    s.drawn_cells <- []
+
+  let incr_column s = s.column <- s.column + 1
+  let end_drawing s = s.in_drawing <- false
+
+  let add_cell s str ~width =
+    s.drawn_cells <- (s.column * width, s.row * width, str) :: s.drawn_cells
+
+  let get_drawn_cells s = s.drawn_cells
+  let get_column s = s.column
+  let get_row s = s.row
+end
+
+let char_width = 30
+let state = State.create ()
+
+let gui_newline () =
+  State.newline state;
   Ok ()
 
 let gui_print_i32 (n : Kdo.Concrete.I32.t) : (unit, Owi.Result.err) Result.t =
   Logs.app (fun m -> m "%a" Kdo.Concrete.I32.pp n);
   Ok ()
 
-let gui_clear_screen () : (unit, Owi.Result.err) Result.t =
-  if !in_drawing then Raylib.end_drawing ();
+let gui_clear_screen () =
+  if State.in_drawing state then Raylib.end_drawing ();
   Raylib.begin_drawing ();
   Raylib.clear_background Raylib.Color.raywhite;
-  in_drawing := true;
-  drawn_cells := [];
-  row := 1;
-  column := 1;
+  State.clear state ~in_drawing:true;
   Ok ()
 
 let draw_int_input_modal buf =
@@ -33,7 +59,7 @@ let draw_int_input_modal buf =
 let draw_scene () =
   List.iter
     (fun (x, y, str) -> Raylib.draw_text str x y 40 Raylib.Color.gray)
-    (List.rev !drawn_cells)
+    (List.rev (State.get_drawn_cells state))
 
 let append_pressed_chars buf =
   let rec loop buf =
@@ -60,7 +86,7 @@ let draw_frame f =
   Raylib.clear_background Raylib.Color.raywhite;
   f ();
   Raylib.end_drawing ();
-  in_drawing := false
+  State.end_drawing state
 
 let poll_event buf =
   let buf = buf |> append_pressed_chars |> handle_backspace in
@@ -88,11 +114,13 @@ let gui_read_int () : (Kdo.Concrete.I32.t, Owi.Result.err) Result.t =
 let gui_print_cell (cell : Kdo.Concrete.I32.t) : (unit, Owi.Result.err) Result.t
     =
   let str = if cell = Kdo.Concrete.I32.zero then "·" else "@" in
-  drawn_cells := (!column * char_width, !row * char_width, str) :: !drawn_cells;
+  State.add_cell state str ~width:char_width;
   begin
-    Raylib.draw_text str (!column * char_width) (!row * char_width) 40
-      Raylib.Color.gray;
-    column := !column + 1
+    Raylib.draw_text str
+      (State.get_column state * char_width)
+      (State.get_row state * char_width)
+      40 Raylib.Color.gray;
+    State.incr_column state
   end;
   Ok ()
 
@@ -102,10 +130,7 @@ let get_gui_functions () =
   begin
     Raylib.init_window 2120 1080 "Ono GUI";
     Raylib.set_trace_log_level Raylib.TraceLogLevel.Error;
-    drawn_cells := [];
-    in_drawing := false;
-    row := 1;
-    column := 1;
+    State.clear state ~in_drawing:false;
     [
       ("print_i32", Extern_func (i32 ^->. unit, gui_print_i32));
       ("newline", Extern_func (unit ^->. unit, gui_newline));
