@@ -33,3 +33,6 @@
 
 # 0.0.9 - 2026-05-18
 - added documentation to report about executing symbolic polynomial solver
+
+# 0.0.10 - 2026-05-21
+-- add better return for parse_int function
