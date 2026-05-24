@@ -74,7 +74,12 @@ Le mode symbolique permet de trouver des configurations initiales répondant à 
 4. **Exécution :**
 ```bash
 dune exec -- ono symbolic config-generation/config-generation.wat
+```
 
+Exécution, conversion du modèle généré par ono en fichier de configuration, puis exécution de ce fichier : 
+```bash
+dune exec -- ono symbolic config-generation/config-generation.wat | sh config-generation/convert_model.sh  > config-generation/generated-config.txt
+dune exec -- ono concrete test/cram/concrete/gameoflife.t/game.wat --config config-generation/generated-config.txt 
 ```
 
 5. **Interprétation du résultat :** Le solveur génère un modèle sous la forme d'une liste de symboles (`symbol_0` à `symbol_n`). Chaque valeur (0 ou 1) correspond à l'état d'une cellule, lue ligne par ligne.
